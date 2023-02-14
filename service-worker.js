@@ -1,3 +1,29 @@
+    // Register a service worker
+navigator.serviceWorker.register('');
+
+// Request permission to send push notifications
+Notification.requestPermission().then(permission => {
+  if (permission === 'granted') {
+    // Create a push subscription
+    navigator.serviceWorker.ready.then(registration => {
+      registration.pushManager.subscribe({ userVisibleOnly: true }).then(subscription => {
+        // Send the subscription data to the server to save
+      });
+    });
+  }
+});
+
+// Send a dynamic push notification
+function sendNotification(title, message) {
+  navigator.serviceWorker.ready.then(registration => {
+    registration.showNotification(title, {
+      body: message
+    });
+  });
+}
+
+sendNotification('Bumble Bees - Blog & News', 'We are excited to announce the release of our latest blog post and news update.!');
+
 self.addEventListener('push', event => {
     const data = event.data.json();
     const title = data.title;
@@ -9,4 +35,3 @@ self.addEventListener('push', event => {
       })
     );
   });
-  
